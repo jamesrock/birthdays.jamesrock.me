@@ -78,15 +78,6 @@
 		});
 
 	},
-	checkDates = function() {
-
-		return birthdays.forEach(function(birthday) {
-
-			// birthday.setDifference();
-
-		});
-
-	},
 	sorters = {
 		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
 			return this.getDate(false, true);
@@ -149,11 +140,10 @@
 	// createBirthday('02/12/1980', 'Ash');
 	// createBirthday('02/12/1980', 'Bliss');
 
-	console.log('today', today);
+	// console.log('today', today);
 
 	birthdays.sort(sorters[sorter]);
 
-	// checkDates();
 	render();
 	// renderSorterSelect();
 
