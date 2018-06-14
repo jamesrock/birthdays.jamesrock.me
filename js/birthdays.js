@@ -1,7 +1,6 @@
 (function() {
 
 	var
-	root = document.getElementById('root'),
 	birthdays = [],
 	Birthday = function(date, name) {
 
@@ -29,16 +28,91 @@
 
 		return out;
 
+	},
+	getDate = function(omitYear) {
+
+		var
+		out,
+		date = new Date(),
+		day = date.getDate(),
+		month = date.getMonth(),
+		year = date.getFullYear();
+
+		month ++;
+
+		day = ROCK.NUMBER.toDouble(day);
+		month = ROCK.NUMBER.toDouble(month);
+
+		out = [day, month];
+
+		if(!omitYear) {
+			out.push(year);
+		};
+
+		out = out.join('/');
+
+		return out;
+
+	},
+	renderSorterSelect = function() {
+
+		var
+		out = document.createElement('select');
+
+		Object.keys(sorters).forEach(function(item) {
+
+			var
+			option = document.createElement('option');
+
+			option.value = item;
+			option.innerHTML = item;
+
+			out.appendChild(option);
+
+		});
+
+	},
+	sorters = {
+		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
+			return this.getSortableDate();
+		}),
+		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
+			return this.getSortableDate(true);
+		})
+	},
+	sorter = 'NEXT';
+
+	Birthday.prototype.getSortableDate = function(omitYear) {
+
+		var
+		out = this.date.split('/');
+
+		if(omitYear) {
+			out.pop();
+		};
+
+		return out.reverse().join('');
+
 	};
+	Birthday.prototype.getDate = function(omitYear) {
 
-	Birthday.prototype.getSortableDate = function() {
+		var
+		out = this.date.split('/');
 
-		return this.date.split('/').reverse().join('');
+		if(omitYear) {
+			out.pop();
+		};
+
+		return out.join('/');
 
 	};
 	Birthday.prototype.toHTML = function() {
 
-		return `<div>${this.name}</div>`;
+		var
+		name = this.name,
+		date = this.getDate(sorter==='NEXT');
+
+		return `<div>${name} ${date}</div>`;
 
 	};
 
@@ -57,10 +131,11 @@
 	// createBirthday('02/12/1980', 'Ash');
 	// createBirthday('02/12/1980', 'Bliss');
 
-	birthdays.sort(ROCK.SORT.NUMBER_ASCENDING(function() {
-		return this.getSortableDate();
-	}));
+	// console.log('getDate()', getDate());
+
+	birthdays.sort(sorters[sorter]);
 
 	render();
+	renderSorterSelect();
 
 })();
