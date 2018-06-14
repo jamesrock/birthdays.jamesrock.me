@@ -29,14 +29,15 @@
 		return out;
 
 	},
-	getDate = function(omitYear) {
+	getDate = function(omitYear, asNumber) {
 
 		var
 		out,
 		date = new Date(),
 		day = date.getDate(),
 		month = date.getMonth(),
-		year = date.getFullYear();
+		year = date.getFullYear(),
+		joiner = '/';
 
 		month ++;
 
@@ -49,7 +50,12 @@
 			out.push(year);
 		};
 
-		out = out.join('/');
+		if(asNumber) {
+			joiner = '';
+			out = out.reverse();
+		};
+
+		out = out.join(joiner);
 
 		return out;
 
@@ -72,47 +78,59 @@
 		});
 
 	},
+	checkDates = function() {
+
+		return birthdays.forEach(function(birthday) {
+
+			// birthday.setDifference();
+
+		});
+
+	},
 	sorters = {
 		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getSortableDate();
+			return this.getDate(false, true);
 		}),
 		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getSortableDate(true);
+			return this.getDate(true, true);
 		})
 	},
-	sorter = 'NEXT';
+	sorter = 'NEXT',
+	today = getDate(true, true);
 
-	Birthday.prototype.getSortableDate = function(omitYear) {
+	Birthday.prototype.getDate = function(omitYear, asNumber) {
 
 		var
-		out = this.date.split('/');
+		out = this.date.split('/'),
+		joiner = '/';
 
 		if(omitYear) {
 			out.pop();
 		};
 
-		return out.reverse().join('');
+		if(asNumber) {
+			joiner = '';
+			out = out.reverse();
+		};
+
+		out = out.join(joiner);
+
+		return out;
 
 	};
-	Birthday.prototype.getDate = function(omitYear) {
+	Birthday.prototype.getDifference = function(date) {
 
-		var
-		out = this.date.split('/');
-
-		if(omitYear) {
-			out.pop();
-		};
-
-		return out.join('/');
+		return this.getDate(true, true)-date;
 
 	};
 	Birthday.prototype.toHTML = function() {
 
 		var
 		name = this.name,
-		date = this.getDate(sorter==='NEXT');
+		date = this.getDate(sorter==='NEXT'),
+		diff = this.getDifference(today);
 
-		return `<div>${name} ${date}</div>`;
+		return `<div>${name} ${date} ${diff}</div>`;
 
 	};
 
@@ -131,11 +149,12 @@
 	// createBirthday('02/12/1980', 'Ash');
 	// createBirthday('02/12/1980', 'Bliss');
 
-	// console.log('getDate()', getDate());
+	console.log('today', today);
 
 	birthdays.sort(sorters[sorter]);
 
+	// checkDates();
 	render();
-	renderSorterSelect();
+	// renderSorterSelect();
 
 })();
