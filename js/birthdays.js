@@ -162,8 +162,6 @@
 	// createBirthday('', 'Ash');
 	// createBirthday('', 'Bliss');
 
-	// console.log('today', today);
-
 	birthdays.sort(sorters[sorter]);
 	console.log('birthdays', birthdays);
 	console.log('today', today);
