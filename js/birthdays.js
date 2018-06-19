@@ -6,6 +6,7 @@
 
 		this.date = date;
 		this.name = name;
+		this.newDate = new Date(date.split('/').reverse().join('/'));
 
 	},
 	createBirthday = function(date, name) {
@@ -25,37 +26,6 @@
 		});
 
 		root.innerHTML = out;
-
-		return out;
-
-	},
-	getDate = function(omitYear, asNumber) {
-
-		var
-		out,
-		date = new Date(),
-		day = date.getDate(),
-		month = date.getMonth(),
-		year = date.getFullYear(),
-		joiner = '/';
-
-		month ++;
-
-		day = ROCK.NUMBER.toDouble(day);
-		month = ROCK.NUMBER.toDouble(month);
-
-		out = [day, month];
-
-		if(!omitYear) {
-			out.push(year);
-		};
-
-		if(asNumber) {
-			joiner = '';
-			out = out.reverse();
-		};
-
-		out = out.join(joiner);
 
 		return out;
 
@@ -80,29 +50,45 @@
 	},
 	sorters = {
 		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getDate(false, true);
+			return this.getDate();
 		}),
 		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getDate(true, true);
+			return this.getDifference(today);
 		})
 	},
 	sorter = 'NEXT',
-	today = getDate(true, true);
+	today = new Date(),
+	months = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
 
-	Birthday.prototype.getDate = function(omitYear, asNumber) {
+	Birthday.prototype.getDate = function() {
+
+		return this.newDate.getTime();
+
+	};
+	Birthday.prototype.getDisplayDate = function(omitYear) {
 
 		var
 		out = this.date.split('/'),
-		joiner = '/';
+		joiner = ' ';
 
 		if(omitYear) {
 			out.pop();
 		};
 
-		if(asNumber) {
-			joiner = '';
-			out = out.reverse();
-		};
+		out[1] = months[this.newDate.getMonth()];
 
 		out = out.join(joiner);
 
@@ -111,14 +97,48 @@
 	};
 	Birthday.prototype.getDifference = function(date) {
 
-		return this.getDate(true, true)-date;
+		// console.group(this.name);
+
+		var
+		origYear = this.newDate.getYear(),
+		year = today.getFullYear(),
+		todayTime = today.getTime(),
+		birthdayTime,
+		passed = false,
+		days = 0;
+
+		this.newDate.setYear(year);
+
+		birthdayTime = this.newDate.getTime();
+		diff = (birthdayTime-todayTime);
+
+		if(diff<0) {
+			year ++;
+			passed = true;
+			this.newDate.setYear(year);
+		};
+
+		birthdayTime = this.newDate.getTime();
+		diff = (birthdayTime-todayTime);
+
+		if(!passed) {
+			diff += ROCK.TIME.getDay();
+		};
+
+		days = ROCK.TIME.getDaysInYear(diff);
+
+		this.newDate.setYear(origYear);
+
+		// console.groupEnd(this.name);
+
+		return days;
 
 	};
 	Birthday.prototype.toHTML = function() {
 
 		var
 		name = this.name,
-		date = this.getDate(sorter==='NEXT'),
+		date = this.getDisplayDate(sorter==='NEXT'),
 		diff = this.getDifference(today);
 
 		return `<div>${name} ${date} ${diff}</div>`;
@@ -135,14 +155,18 @@
 	createBirthday('23/06/1946', 'Gran');
 	createBirthday('04/09/1945', 'Granddad');
 	createBirthday('20/10/2014', 'Dollie-Mae');
-	// createBirthday('02/12/1980', 'Alan');
-	// createBirthday('02/12/1980', 'Neil');
-	// createBirthday('02/12/1980', 'Ash');
-	// createBirthday('02/12/1980', 'Bliss');
+	// createBirthday('27/07', 'Amanda');
+	// createBirthday('10/01', 'Charles');
+	// createBirthday('', 'Alan');
+	// createBirthday('', 'Neil');
+	// createBirthday('', 'Ash');
+	// createBirthday('', 'Bliss');
 
 	// console.log('today', today);
 
 	birthdays.sort(sorters[sorter]);
+	console.log('birthdays', birthdays);
+	console.log('today', today);
 
 	render();
 	// renderSorterSelect();
