@@ -50,7 +50,7 @@
 	},
 	sorters = {
 		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getDate();
+			return this.getTime();
 		}),
 		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
 			return this.getDifference(today);
@@ -73,12 +73,17 @@
 		'Dec'
 	];
 
-	Birthday.prototype.getDate = function() {
+	Birthday.prototype.getTime = function() {
 
 		return this.newDate.getTime();
 
 	};
-	Birthday.prototype.getDisplayDate = function(omitYear) {
+	Birthday.prototype.getFullYear = function() {
+
+		return this.newDate.getFullYear();
+
+	};
+	Birthday.prototype.getDisplayDate = function(omitYear, omitAge) {
 
 		var
 		out = this.date.split('/'),
@@ -88,6 +93,10 @@
 			out.pop();
 		};
 
+		if(!omitAge) {
+			out.push(ROCK.TIME.getYears(this.getDiff(today)));
+		};
+
 		out[1] = months[this.newDate.getMonth()];
 
 		out = out.join(joiner);
@@ -95,21 +104,30 @@
 		return out;
 
 	};
+	Birthday.prototype.getDiff = function(date) {
+
+		var
+		todayTime = date.getTime(),
+		birthdayTime = this.getTime();
+		return (todayTime-birthdayTime);
+
+	};
 	Birthday.prototype.getDifference = function(date) {
 
 		// console.group(this.name);
 
 		var
-		origYear = this.newDate.getYear(),
-		year = today.getFullYear(),
-		todayTime = today.getTime(),
+		origYear = this.getFullYear(),
+		year = date.getFullYear(),
+		todayTime = date.getTime(),
 		birthdayTime,
 		passed = false,
-		days = 0;
+		days = 0,
+		diff = 0;
 
 		this.newDate.setYear(year);
 
-		birthdayTime = this.newDate.getTime();
+		birthdayTime = this.getTime();
 		diff = (birthdayTime-todayTime);
 
 		if(diff<0) {
@@ -118,7 +136,7 @@
 			this.newDate.setYear(year);
 		};
 
-		birthdayTime = this.newDate.getTime();
+		birthdayTime = this.getTime();
 		diff = (birthdayTime-todayTime);
 
 		if(!passed) {
@@ -137,8 +155,9 @@
 	Birthday.prototype.toHTML = function() {
 
 		var
+		omitYear = sorter==='NEXT',
 		name = this.name,
-		date = this.getDisplayDate(sorter==='NEXT'),
+		date = this.getDisplayDate(omitYear, !omitYear),
 		diff = this.getDifference(today);
 
 		return `<div>${name} ${date} ${diff}</div>`;
@@ -155,16 +174,17 @@
 	createBirthday('23/06/1946', 'Gran');
 	createBirthday('04/09/1945', 'Granddad');
 	createBirthday('20/10/2014', 'Dollie-Mae');
-	// createBirthday('27/07', 'Amanda');
-	// createBirthday('10/01', 'Charles');
+	createBirthday('27/07/1955', 'Amanda');
+	createBirthday('10/01/1954', 'Charles');
+	createBirthday('10/10/2017', 'Bliss');
 	// createBirthday('', 'Alan');
 	// createBirthday('', 'Neil');
 	// createBirthday('', 'Ash');
-	// createBirthday('', 'Bliss');
 
 	birthdays.sort(sorters[sorter]);
+
 	console.log('birthdays', birthdays);
-	console.log('today', today);
+	// console.log('today', today);
 
 	render();
 	// renderSorterSelect();
