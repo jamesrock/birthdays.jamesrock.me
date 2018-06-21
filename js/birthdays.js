@@ -4,9 +4,12 @@
 	birthdays = [],
 	Birthday = function(date, name) {
 
+		var
+		dateString = date.split('/').reverse().join('/');
+
 		this.date = date;
 		this.name = name;
-		this.newDate = new Date(date.split('/').reverse().join('/'));
+		this.newDate = new Date(dateString);
 
 	},
 	createBirthday = function(date, name) {
@@ -78,6 +81,11 @@
 		return this.newDate.getTime();
 
 	};
+	Birthday.prototype.getMonth = function() {
+
+		return this.newDate.getMonth();
+
+	};
 	Birthday.prototype.getFullYear = function() {
 
 		return this.newDate.getFullYear();
@@ -94,7 +102,7 @@
 		};
 
 		if(!omitAge) {
-			out.push(ROCK.TIME.getYears(this.getDiff(today)));
+			out.push(this.getAge(today));
 		};
 
 		out[1] = months[this.newDate.getMonth()];
@@ -104,12 +112,28 @@
 		return out;
 
 	};
-	Birthday.prototype.getDiff = function(date) {
+	Birthday.prototype.getAge = function(date) {
+
+		// console.log(this.name);
 
 		var
 		todayTime = date.getTime(),
-		birthdayTime = this.getTime();
-		return (todayTime-birthdayTime);
+		birthdayTime = this.getTime(),
+		diff = (todayTime-birthdayTime),
+		sameMonth = (this.getMonth()===date.getMonth()),
+		passed = this.passed;
+
+		// console.log('sameMonth', sameMonth);
+		// console.log('passed', passed);
+		// console.log('birthdayTime', birthdayTime);
+
+		diff += ROCK.TIME.getYear();
+
+		if(sameMonth&&!passed) {
+			diff -= ROCK.TIME.getYear();
+		};
+
+		return ROCK.TIME.getYears(diff);
 
 	};
 	Birthday.prototype.getDifference = function(date) {
@@ -121,7 +145,6 @@
 		year = date.getFullYear(),
 		todayTime = date.getTime(),
 		birthdayTime,
-		passed = false,
 		days = 0,
 		diff = 0;
 
@@ -132,20 +155,22 @@
 
 		if(diff<0) {
 			year ++;
-			passed = true;
+			this.passed = true;
 			this.newDate.setYear(year);
 		};
 
 		birthdayTime = this.getTime();
 		diff = (birthdayTime-todayTime);
 
-		if(!passed) {
+		if(!this.passed) {
 			diff += ROCK.TIME.getDay();
 		};
 
 		days = ROCK.TIME.getDaysInYear(diff);
 
-		this.newDate.setYear(origYear);
+		this.next = this.getTime();
+
+		this.newDate.setFullYear(origYear);
 
 		// console.groupEnd(this.name);
 
@@ -157,12 +182,14 @@
 		var
 		omitYear = sorter==='NEXT',
 		name = this.name,
-		date = this.getDisplayDate(omitYear, !omitYear),
-		diff = this.getDifference(today);
+		diff = this.getDifference(today),
+		date = this.getDisplayDate(omitYear, !omitYear);
 
 		return `<div>${name} ${date} ${diff}</div>`;
 
 	};
+	Birthday.prototype.passed = false;
+	Birthday.prototype.next = null;
 
 	createBirthday('08/01/1989', 'Me');
 	createBirthday('02/12/1980', 'Alice');
