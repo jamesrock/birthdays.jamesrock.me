@@ -4,12 +4,9 @@
 	birthdays = [],
 	Birthday = function(date, name) {
 
-		var
-		dateString = date.split('/').reverse().join('/');
-
 		this.date = date;
 		this.name = name;
-		this.newDate = new Date(dateString);
+		this.newDate = new Date(date);
 
 	},
 	createBirthday = function(date, name) {
@@ -94,7 +91,7 @@
 	Birthday.prototype.getDisplayDate = function(omitYear, omitAge) {
 
 		var
-		out = this.date.split('/'),
+		out = this.date.split('/').reverse(),
 		joiner = ' ';
 
 		if(omitYear) {
@@ -191,19 +188,19 @@
 	Birthday.prototype.passed = false;
 	Birthday.prototype.next = null;
 
-	createBirthday('08/01/1989', 'Me');
-	createBirthday('02/12/1980', 'Alice');
-	createBirthday('26/03/2013', 'Harris');
-	createBirthday('18/04/2015', 'Arran');
-	createBirthday('23/11/1993', 'Charlotte');
-	createBirthday('04/06/1999', 'Thomas');
-	createBirthday('04/12/1967', 'Mum');
-	createBirthday('23/06/1946', 'Gran');
-	createBirthday('04/09/1945', 'Granddad');
-	createBirthday('20/10/2014', 'Dollie-Mae');
-	createBirthday('27/07/1955', 'Amanda');
-	createBirthday('10/01/1954', 'Charles');
-	createBirthday('10/10/2017', 'Bliss');
+	createBirthday('1989/01/08', 'Me');
+	createBirthday('1980/12/02', 'Alice');
+	createBirthday('2013/03/26', 'Harris');
+	createBirthday('2015/04/18', 'Arran');
+	createBirthday('1993/11/23', 'Charlotte');
+	createBirthday('1999/06/04', 'Thomas');
+	createBirthday('1967/12/04', 'Mum');
+	createBirthday('1946/06/23', 'Gran');
+	createBirthday('1945/09/04', 'Granddad');
+	createBirthday('2014/10/20', 'Dollie-Mae');
+	createBirthday('1955/07/27', 'Amanda');
+	createBirthday('1954/01/10', 'Charles');
+	createBirthday('2017/10/10', 'Bliss');
 	// createBirthday('', 'Alan');
 	// createBirthday('', 'Neil');
 	// createBirthday('', 'Ash');
