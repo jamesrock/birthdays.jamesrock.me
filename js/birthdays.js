@@ -42,7 +42,8 @@
 
 		var
 		birthdaysMarkup = '',
-		nextView = sorterLabels[sorterKeys[getNextInCycle()]];
+		nextView = sorterLabels[sorterKeys[getNextInCycle()]],
+		currentView = sortedLabels[sorterKeys[sorter]];
 
 		birthdays.forEach(function(birthday) {
 
@@ -50,7 +51,7 @@
 
 		});
 
-		out = `<div><div class="birthdays">${birthdaysMarkup}</div><div class="foot"><button id="sorterCycle">${nextView}</button></div></div>`;
+		out = `<div><div class="birthdays">${birthdaysMarkup}</div><div class="foot"><div class="current-view">${currentView}</div><div class="next-view"><a href="#" id="sorterCycle">${nextView}</a></div></div></div>`;
 
 		root.innerHTML = out;
 
@@ -78,6 +79,11 @@
 		DOB: 'sort by date of birth',
 		NEXT: 'sort by next occurrence',
 		AGE: 'sort by age'
+	},
+	sortedLabels = {
+		DOB: 'sorted by <span class="view-type">date of birth</span>',
+		NEXT: 'sorted by <span class="view-type">next occurrence</span>',
+		AGE: 'sorted by <span class="view-type">age</span>'
 	},
 	maxSorters = (sorterKeys.length-1),
 	today = new Date(),

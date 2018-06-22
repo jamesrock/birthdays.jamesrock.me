@@ -7,19 +7,38 @@ body {
 	font-family: sans-serif;
 	padding: 20px;
 	font-size: 20px;
+	text-align: center;
 }
 
 .foot {
-	text-align: center;
 	padding-top: 20px;
+}
+
+.current-view {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.view-type {
+	color: indianred;
 }
 
 button {
 	font-size: inherit;
-	background: lightcoral;
+	background: white;
 	border: 0;
 	color: white;
 	padding: 10px 30px;
 	cursor: pointer;
 	border-radius: 2px;
+	border: solid 2px lightcoral;
+}
+
+a {
+	color: blue;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }
