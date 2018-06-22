@@ -16,8 +16,10 @@ body {
 
 button {
 	font-size: inherit;
-	background: blue;
+	background: lightcoral;
 	border: 0;
 	color: white;
-	padding: 10px 20px;
+	padding: 10px 30px;
+	cursor: pointer;
+	border-radius: 2px;
 }

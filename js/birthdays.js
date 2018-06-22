@@ -42,7 +42,7 @@
 
 		var
 		birthdaysMarkup = '',
-		nextView = sorterKeys[getNextInCycle()];
+		nextView = sorterLabels[sorterKeys[getNextInCycle()]];
 
 		birthdays.forEach(function(birthday) {
 
@@ -67,7 +67,11 @@
 	},
 	sorter = 1,
 	sorterKeys = Object.keys(sorters),
-	maxSorters = sorterKeys.length-1,
+	sorterLabels = {
+		DOB: 'sort by date of birth',
+		NEXT: 'sort by next occurrence'
+	},
+	maxSorters = (sorterKeys.length-1),
 	today = new Date(),
 	months = [
 		'Jan',
@@ -104,19 +108,18 @@
 		return this.newDate.setFullYear(year);
 
 	};
-	Birthday.prototype.getDisplayDate = function(omitYear, omitAge) {
+	Birthday.prototype.getDisplayDate = function(omitYear, currentAge) {
 
 		var
 		out = this.date.split('/').reverse(),
-		joiner = ' ';
+		joiner = ' ',
+		age = this.getAge(today, !currentAge);
 
 		if(omitYear) {
 			out.pop();
 		};
 
-		if(!omitAge) {
-			out.push(this.getAge(today));
-		};
+		out.push(age);
 
 		out[1] = months[this.newDate.getMonth()];
 
@@ -125,9 +128,9 @@
 		return out;
 
 	};
-	Birthday.prototype.getAge = function(date) {
+	Birthday.prototype.getAge = function(date, nextAge) {
 
-		// console.log(this.name);
+		// console.log(this.name, nextAge);
 
 		var
 		todayTime = date.getTime(),
@@ -140,7 +143,9 @@
 		// console.log('passed', passed);
 		// console.log('birthdayTime', birthdayTime);
 
-		diff += ROCK.TIME.getYear();
+		if(nextAge) {
+			diff += ROCK.TIME.getYear();
+		};
 
 		if(sameMonth&&!passed) {
 			diff -= ROCK.TIME.getYear();
@@ -195,10 +200,14 @@
 	Birthday.prototype.toHTML = function() {
 
 		var
-		omitYear = sorter==='NEXT',
+		omitYear = (sorter===1),
 		name = this.name,
 		diff = this.getDifference(today),
 		date = this.getDisplayDate(omitYear, !omitYear);
+
+		if(!omitYear) {
+			diff = '';
+		};
 
 		return `<div class="birthday">${name} ${date} ${diff}</div>`;
 
@@ -225,14 +234,11 @@
 
 	birthdays.sort(sorters[sorterKeys[sorter]]);
 
-	console.log('birthdays', birthdays);
+	// console.log('birthdays', birthdays);
+	// console.log('sorterKeys', sorterKeys);
 	// console.log('today', today);
 
-	console.log('maxSorters', maxSorters);
-
 	root.addEventListener('click', function(event) {
-
-		console.log('event', event.target);
 
 		switch(event.target.id) {
 			case 'sorterCycle':
