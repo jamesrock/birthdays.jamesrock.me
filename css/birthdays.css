@@ -8,3 +8,16 @@ body {
 	padding: 20px;
 	font-size: 20px;
 }
+
+.foot {
+	text-align: center;
+	padding-top: 20px;
+}
+
+button {
+	font-size: inherit;
+	background: blue;
+	border: 0;
+	color: white;
+	padding: 10px 20px;
+}

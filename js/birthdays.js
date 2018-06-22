@@ -14,38 +14,47 @@
 		birthdays.push(new Birthday(date, name));
 
 	},
-	render = function() {
+	cycleSorter = function() {
+
+		sorter = getNextInCycle();
+
+		birthdays.sort(sorters[sorterKeys[sorter]]);
+
+		render();
+
+	},
+	getNextInCycle = function() {
 
 		var
-		out = '';
+		out = sorter;
 
-		birthdays.forEach(function(birthday) {
-
-			out += birthday.toHTML();
-
-		});
-
-		root.innerHTML = out;
+		if(sorter===maxSorters) {
+			out = 0;
+		}
+		else {
+			out ++;
+		};
 
 		return out;
 
 	},
-	renderSorterSelect = function() {
+	render = function() {
 
 		var
-		out = document.createElement('select');
+		birthdaysMarkup = '',
+		nextView = sorterKeys[getNextInCycle()];
 
-		Object.keys(sorters).forEach(function(item) {
+		birthdays.forEach(function(birthday) {
 
-			var
-			option = document.createElement('option');
-
-			option.value = item;
-			option.innerHTML = item;
-
-			out.appendChild(option);
+			birthdaysMarkup += birthday.toHTML();
 
 		});
+
+		out = `<div><div class="birthdays">${birthdaysMarkup}</div><div class="foot"><button id="sorterCycle">${nextView}</button></div></div>`;
+
+		root.innerHTML = out;
+
+		return out;
 
 	},
 	sorters = {
@@ -56,7 +65,9 @@
 			return this.getDifference(today);
 		})
 	},
-	sorter = 'NEXT',
+	sorter = 1,
+	sorterKeys = Object.keys(sorters),
+	maxSorters = sorterKeys.length-1,
 	today = new Date(),
 	months = [
 		'Jan',
@@ -86,6 +97,11 @@
 	Birthday.prototype.getFullYear = function() {
 
 		return this.newDate.getFullYear();
+
+	};
+	Birthday.prototype.setFullYear = function(year) {
+
+		return this.newDate.setFullYear(year);
 
 	};
 	Birthday.prototype.getDisplayDate = function(omitYear, omitAge) {
@@ -138,26 +154,28 @@
 		// console.group(this.name);
 
 		var
-		origYear = this.getFullYear(),
-		year = date.getFullYear(),
+		birthday = this,
+		birthdayTime = 0,
+		birthdayYear = birthday.getFullYear(),
 		todayTime = date.getTime(),
-		birthdayTime,
+		todayYear = date.getFullYear(),
 		days = 0,
-		diff = 0;
-
-		this.newDate.setYear(year);
-
-		birthdayTime = this.getTime();
-		diff = (birthdayTime-todayTime);
-
-		if(diff<0) {
-			year ++;
-			this.passed = true;
-			this.newDate.setYear(year);
+		diff = 0,
+		calc = function() {
+			birthdayTime = birthday.getTime();
+			diff = (birthdayTime-todayTime);
 		};
 
-		birthdayTime = this.getTime();
-		diff = (birthdayTime-todayTime);
+		this.setFullYear(todayYear);
+
+		calc();
+
+		if(diff<0) {
+			todayYear ++;
+			this.passed = true;
+			this.newDate.setFullYear(todayYear);
+			calc();
+		};
 
 		if(!this.passed) {
 			diff += ROCK.TIME.getDay();
@@ -167,7 +185,7 @@
 
 		this.next = this.getTime();
 
-		this.newDate.setFullYear(origYear);
+		this.setFullYear(birthdayYear);
 
 		// console.groupEnd(this.name);
 
@@ -182,7 +200,7 @@
 		diff = this.getDifference(today),
 		date = this.getDisplayDate(omitYear, !omitYear);
 
-		return `<div>${name} ${date} ${diff}</div>`;
+		return `<div class="birthday">${name} ${date} ${diff}</div>`;
 
 	};
 	Birthday.prototype.passed = false;
@@ -205,12 +223,29 @@
 	// createBirthday('', 'Neil');
 	// createBirthday('', 'Ash');
 
-	birthdays.sort(sorters[sorter]);
+	birthdays.sort(sorters[sorterKeys[sorter]]);
 
 	console.log('birthdays', birthdays);
 	// console.log('today', today);
 
+	console.log('maxSorters', maxSorters);
+
+	root.addEventListener('click', function(event) {
+
+		console.log('event', event.target);
+
+		switch(event.target.id) {
+			case 'sorterCycle':
+
+				cycleSorter();
+
+			break;
+			default:
+			 	// do nothing
+		};
+
+	});
+
 	render();
-	// renderSorterSelect();
 
 })();
