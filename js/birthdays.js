@@ -14,6 +14,24 @@
 		birthdays.push(new Birthday(date, name));
 
 	},
+	createSortedLabel = function(id, label) {
+
+		sortedLabels[id] = `sorted by <span class="view-type">${label}</span>`;
+		return sortedLabels[id];
+
+	},
+	createSorterLabel = function(id, label) {
+
+		sorterLabels[id] = `sort by ${label}`;
+		return sorterLabels[id];
+
+	},
+	createLabels = function(id, label) {
+
+		createSortedLabel(id, label);
+		createSorterLabel(id, label);
+
+	},
 	cycleSorter = function() {
 
 		sorter = getNextInCycle();
@@ -47,7 +65,7 @@
 
 		birthdays.forEach(function(birthday) {
 
-			birthdaysMarkup += birthday.toHTML();
+			birthdaysMarkup += birthday.render();
 
 		});
 
@@ -75,16 +93,8 @@
 		'DOB',
 		'AGE'
 	],
-	sorterLabels = {
-		DOB: 'sort by date of birth',
-		NEXT: 'sort by next occurrence',
-		AGE: 'sort by age'
-	},
-	sortedLabels = {
-		DOB: 'sorted by <span class="view-type">date of birth</span>',
-		NEXT: 'sorted by <span class="view-type">occurrence</span>',
-		AGE: 'sorted by <span class="view-type">age</span>'
-	},
+	sorterLabels = {},
+	sortedLabels = {},
 	maxSorters = (sorterKeys.length-1),
 	today = new Date(),
 	months = [
@@ -211,7 +221,7 @@
 		return days;
 
 	};
-	Birthday.prototype.toHTML = function() {
+	Birthday.prototype.render = function() {
 
 		var
 		omitYear = (sorter===0),
@@ -223,11 +233,15 @@
 			diff = '';
 		};
 
-		return `<div class="birthday">${name} ${date} ${diff}</div>`;
+		return `<div class="birthday"><span>${name}</span> ${date} ${diff}</div>`;
 
 	};
 	Birthday.prototype.passed = false;
 	Birthday.prototype.next = null;
+
+	createLabels('DOB', 'date of birth');
+	createLabels('NEXT', 'occurrence');
+	createLabels('AGE', 'age');
 
 	createBirthday('1989/01/08', 'Me');
 	createBirthday('1980/12/02', 'Alice');

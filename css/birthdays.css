@@ -5,8 +5,8 @@
 
 body {
 	font-family: sans-serif;
-	padding: 40px 20px 80px;
-	font-size: 20px;
+	padding: 40px 10px 80px;
+	font-size: 22px;
 	text-align: center;
 }
 
@@ -16,10 +16,11 @@ body {
 	right: 0;
 	bottom: 0;
 	padding: 20px 10px;
+	font-style: italic;
 }
 
 .current-view {
-	font-style: italic;
+
 	font-weight: bold;
 }
 
