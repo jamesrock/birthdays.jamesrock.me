@@ -136,14 +136,11 @@
 
 		var
 		out = this.date.split('/').reverse(),
-		joiner = ' ',
-		age = this.getDisplayAge(today, !currentAge);
+		joiner = ' ';
 
 		if(omitYear) {
 			out.pop();
 		};
-
-		out.push(age);
 
 		out[1] = months[this.newDate.getMonth()];
 
@@ -226,19 +223,27 @@
 		return days;
 
 	};
+	Birthday.prototype.getName = function() {
+
+		return `<span>${this.name}</span>`;
+
+	};
 	Birthday.prototype.render = function() {
 
 		var
 		omitYear = (sorter===0),
-		name = this.name,
+		name = this.getName(),
 		diff = this.getDifference(today),
-		date = this.getDisplayDate(omitYear, !omitYear);
+		date = this.getDisplayDate(omitYear, !omitYear),
+		age = this.getDisplayAge(today, omitYear),
+		out = [name, date, age, diff];
 
 		if(!omitYear) {
-			diff = '';
+			// diff = '';
+			out.pop();
 		};
 
-		return `<div class="birthday"><span>${name}</span> ${date} ${diff}</div>`;
+		return `<div class="birthday">${name} ${date} ${age} ${diff}</div>`;
 
 	};
 	Birthday.prototype.passed = false;
