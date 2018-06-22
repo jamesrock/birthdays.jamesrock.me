@@ -51,7 +51,7 @@
 
 		});
 
-		out = `<div><div class="birthdays">${birthdaysMarkup}</div><div class="foot"><div class="current-view">${currentView}</div><div class="next-view"><a href="#" id="sorterCycle">${nextView}</a></div></div></div>`;
+		out = `<div class="birthdays">${birthdaysMarkup}</div><div class="foot"><div class="current-view">${currentView}</div><div class="next-view"><a href="#" id="sorterCycle">${nextView}</a></div></div>`;
 
 		root.innerHTML = out;
 

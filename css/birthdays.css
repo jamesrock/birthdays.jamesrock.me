@@ -5,13 +5,17 @@
 
 body {
 	font-family: sans-serif;
-	padding: 40px 20px;
+	padding: 40px 20px 80px;
 	font-size: 20px;
 	text-align: center;
 }
 
 .foot {
-	padding-top: 20px;
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 20px 10px;
 }
 
 .current-view {
