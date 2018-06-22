@@ -1,7 +1,6 @@
 (function() {
 
 	var
-	birthdays = [],
 	Birthday = function(date, name) {
 
 		this.date = date;
@@ -76,6 +75,7 @@
 		return out;
 
 	},
+	birthdays = [],
 	sorters = {
 		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
 			return this.getDifference(today);
