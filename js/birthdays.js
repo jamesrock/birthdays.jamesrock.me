@@ -82,7 +82,7 @@
 	},
 	sortedLabels = {
 		DOB: 'sorted by <span class="view-type">date of birth</span>',
-		NEXT: 'sorted by <span class="view-type">next occurrence</span>',
+		NEXT: 'sorted by <span class="view-type">occurrence</span>',
 		AGE: 'sorted by <span class="view-type">age</span>'
 	},
 	maxSorters = (sorterKeys.length-1),
@@ -257,6 +257,7 @@
 		switch(event.target.id) {
 			case 'sorterCycle':
 
+				event.preventDefault();
 				cycleSorter();
 
 			break;
