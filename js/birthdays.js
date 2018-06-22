@@ -137,7 +137,7 @@
 		var
 		out = this.date.split('/').reverse(),
 		joiner = ' ',
-		age = this.getAge(today, !currentAge);
+		age = this.getDisplayAge(today, !currentAge);
 
 		if(omitYear) {
 			out.pop();
@@ -175,7 +175,12 @@
 			diff -= ROCK.TIME.getYear();
 		};
 
-		return ROCK.TIME.getYears(diff);
+		return diff;
+
+	};
+	Birthday.prototype.getDisplayAge = function(date, nextAge) {
+
+		return ROCK.TIME.getYears(this.getAge(date, nextAge));
 
 	};
 	Birthday.prototype.getDifference = function(date) {
