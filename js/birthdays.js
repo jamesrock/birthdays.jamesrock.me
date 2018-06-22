@@ -58,18 +58,26 @@
 
 	},
 	sorters = {
+		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
+			return this.getDifference(today);
+		}),
 		DOB: ROCK.SORT.NUMBER_ASCENDING(function() {
 			return this.getTime();
 		}),
-		NEXT: ROCK.SORT.NUMBER_ASCENDING(function() {
-			return this.getDifference(today);
+		AGE: ROCK.SORT.NUMBER_ASCENDING(function() {
+			return this.getAge(today);
 		})
 	},
-	sorter = 1,
-	sorterKeys = Object.keys(sorters),
+	sorter = 0,
+	sorterKeys = [
+		'NEXT',
+		'DOB',
+		'AGE'
+	],
 	sorterLabels = {
 		DOB: 'sort by date of birth',
-		NEXT: 'sort by next occurrence'
+		NEXT: 'sort by next occurrence',
+		AGE: 'sort by age'
 	},
 	maxSorters = (sorterKeys.length-1),
 	today = new Date(),
@@ -200,7 +208,7 @@
 	Birthday.prototype.toHTML = function() {
 
 		var
-		omitYear = (sorter===1),
+		omitYear = (sorter===0),
 		name = this.name,
 		diff = this.getDifference(today),
 		date = this.getDisplayDate(omitYear, !omitYear);
