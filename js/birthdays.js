@@ -243,7 +243,7 @@
 			out.pop();
 		};
 
-		out = out.join(' - ');
+		out = out.join(' &#8226; ');
 
 		return `<div class="birthday">${out}</div>`;
 
