@@ -243,7 +243,9 @@
 			out.pop();
 		};
 
-		return `<div class="birthday">${name} ${date} ${age} ${diff}</div>`;
+		out = out.join(' - ');
+
+		return `<div class="birthday">${out}</div>`;
 
 	};
 	Birthday.prototype.passed = false;
