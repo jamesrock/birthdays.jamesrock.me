@@ -16,24 +16,15 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	padding: 20px 10px;
-	font-style: italic;
-}
-
-.current-view {
-
-	font-weight: bold;
+	padding: 20px 10px 30px;
 }
 
 .view-type {
-	color: indianred;
+	font-weight: bold;
 }
 
 a {
-	color: blue;
 	text-decoration: none;
-}
-
-a:hover {
+	color: #00F;
 	text-decoration: underline;
 }

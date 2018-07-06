@@ -21,7 +21,7 @@
 	},
 	createSorterLabel = function(id, label) {
 
-		sorterLabels[id] = `sort by ${label}`;
+		sorterLabels[id] = `sort by <span class="view-type sorter-cycle">${label}</span>`;
 		return sorterLabels[id];
 
 	},
@@ -68,11 +68,40 @@
 
 		});
 
-		out = `<div class="birthdays">${birthdaysMarkup}</div><div class="foot"><div class="current-view">${currentView}</div><div class="next-view"><a href="#" id="sorterCycle">${nextView}</a></div></div>`;
+		out = `\
+			<div class="birthdays">${birthdaysMarkup}</div>\
+			<div class="foot">\
+				<div class="current-view">${currentView}</div>\
+				<div class="next-view"><a href="#" class="sorter-cycle">${nextView}</a></div>\
+			</div>`;
 
 		root.innerHTML = out;
 
 		return out;
+
+	},
+	delegate = function(selector, event, handler) {
+
+		var
+		items,
+		loop;
+
+		root.addEventListener(event, function(event) {
+
+			items = document.querySelectorAll(selector);
+			loop = items.length;
+
+			while(loop--) {
+
+				if(event.target===items[loop]) {
+					handler.call(items, event);
+				};
+
+			};
+
+		});
+
+		return items;
 
 	},
 	birthdays = [],
@@ -278,21 +307,13 @@
 	// console.log('sorterKeys', sorterKeys);
 	// console.log('today', today);
 
-	root.addEventListener('click', function(event) {
+	render();
 
-		switch(event.target.id) {
-			case 'sorterCycle':
+	delegate('.sorter-cycle', 'click', function(event) {
 
-				event.preventDefault();
-				cycleSorter();
-
-			break;
-			default:
-			 	// do nothing
-		};
+		event.preventDefault();
+		cycleSorter();
 
 	});
-
-	render();
 
 })();
