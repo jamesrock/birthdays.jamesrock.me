@@ -86,7 +86,7 @@
 		items,
 		loop;
 
-		root.addEventListener(event, function(event) {
+		document.documentElement.addEventListener(event, function(event) {
 
 			items = document.querySelectorAll(selector);
 			loop = items.length;
