@@ -297,8 +297,11 @@
 	createBirthday('2014/10/20', 'Dollie-Mae');
 	createBirthday('1955/07/27', 'Amanda');
 	createBirthday('1954/01/10', 'Charles');
-	createBirthday('2017/10/10', 'Bliss');
-	// createBirthday('', 'Alan');
+	createBirthday('2017/10/11', 'Bliss');
+	// createBirthday('', 'Eve');
+	// createBirthday('', 'Jim');
+	// createBirthday('', 'Laila');
+	// createBirthday('', 'Steffie');
 	// createBirthday('', 'Neil');
 	// createBirthday('', 'Ash');
 
