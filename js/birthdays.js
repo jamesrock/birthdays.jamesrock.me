@@ -284,12 +284,13 @@
 	createLabels('NEXT', 'occurrence');
 	createLabels('AGE', 'age');
 
+	createBirthday('1979/02/17', 'Eve');
 	createBirthday('1989/01/08', 'Me');
 	createBirthday('1980/12/02', 'Alice');
+	createBirthday('1999/06/04', 'Thomas');
+	createBirthday('1993/11/23', 'Charlotte');
 	createBirthday('2013/03/26', 'Harris');
 	createBirthday('2015/04/18', 'Arran');
-	createBirthday('1993/11/23', 'Charlotte');
-	createBirthday('1999/06/04', 'Thomas');
 	createBirthday('1967/12/04', 'Mum');
 	createBirthday('1946/06/23', 'Gran');
 	createBirthday('1945/09/04', 'Granddad');
